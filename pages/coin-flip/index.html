@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamUtils // Decision Maker</title>
+    <link rel="icon" type="image/png" href="site-logo.png">
+    <style>
+        :root {
+            --twitch-purple: #9146FF;
+            --twitch-dark-bg: #0e0e10;
+            --twitch-surface: #1f1f23;
+            --twitch-text: #efeff1;
+            --twitch-text-muted: #adadb8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { 
+            background: var(--twitch-dark-bg); 
+            color: var(--twitch-text); 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            margin: 0; 
+            overflow: hidden;
+        }
+
+        /* --- HEADER --- */
+        nav {
+            background: var(--twitch-surface);
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            border-bottom: 2px solid var(--twitch-purple);
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .active-page {
+            font-weight: 800;
+            color: var(--twitch-purple);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--twitch-text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.05);
+            transition: 0.2s;
+        }
+
+        .back-btn:hover { background: var(--twitch-purple); color: white; }
+
+        /* --- COIN UI --- */
+        .container { 
+            height: calc(100vh - 64px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coin-wrapper {
+            perspective: 1000px;
+            width: 200px;
+            height: 200px;
+            margin-bottom: 3rem;
+        }
+
+        .coin {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 3s cubic-bezier(0.1, 1, 0.1, 1);
+        }
+
+        /* Coin Sides */
+        .side {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+            border: 8px solid rgba(255,255,255,0.1);
+        }
+
+        .heads {
+            background-color: var(--twitch-purple);
+            color: white;
+            z-index: 2;
+        }
+
+        .tails {
+            background-color: #333;
+            color: var(--twitch-text-muted);
+            transform: rotateY(180deg);
+        }
+
+        /* --- BUTTONS --- */
+        .controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .flip-btn {
+            background: var(--twitch-purple);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 6px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: 0.2s;
+        }
+
+        .flip-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .flip-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <span class="active-page">Active Tool: Decision Maker</span>
+            <a href="index.html" class="back-btn">← Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="coin-wrapper">
+            <div id="coin" class="coin">
+                <div class="side heads">HEADS</div>
+                <div class="side tails">TAILS</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="flip-btn" class="flip-btn" onclick="flipCoin()">Flip Coin</button>
+        </div>
+    </div>
+
+    <script>
+        let currentRotation = 0;
+
+        function flipCoin() {
+            const coin = document.getElementById('coin');
+            const btn = document.getElementById('flip-btn');
+            
+            // Disable button during flip
+            btn.disabled = true;
+
+            // Determine result (0 = heads, 1 = tails)
+            const result = Math.floor(Math.random() * 2);
+            
+            // Add a massive amount of spins (5 to 10 full rotations)
+            const extraSpins = (Math.floor(Math.random() * 5) + 5) * 360;
+            
+            // Calculate final target rotation
+            // Heads = 0, 360, 720... | Tails = 180, 540, 900...
+            const finalRotation = currentRotation + extraSpins + (result === 1 ? 180 : 0);
+            
+            // Apply CSS transform
+            coin.style.transform = `rotateY(${finalRotation}deg)`;
+            
+            // Save rotation for next flip (prevents snapping backward)
+            currentRotation = finalRotation;
+
+            // Re-enable button after animation (3 seconds)
+            setTimeout(() => {
+                btn.disabled = false;
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
