@@ -3,36 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamUtils // Creator Toolbox</title>
+    <title>StreamUtils // Home</title>
     <style>
-        /* --- TWITCH THEME VARIABLES --- */
         :root {
             --twitch-purple: #9146FF;
-            --twitch-purple-hover: #772ce8;
             --twitch-dark-bg: #0e0e10;
             --twitch-surface: #1f1f23;
             --twitch-surface-low: #18181b;
             --twitch-text: #efeff1;
             --twitch-text-muted: #adadb8;
-            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        /* --- GLOBAL RESET --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--twitch-dark-bg);
             color: var(--twitch-text);
-            font-family: var(--font-main);
+            font-family: 'Inter', -apple-system, sans-serif;
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
-        /* --- NAVIGATION --- */
         nav {
             background-color: var(--twitch-surface);
             height: 64px;
@@ -43,11 +33,10 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
         .nav-container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             width: 100%;
             display: flex;
@@ -55,86 +44,21 @@
             align-items: center;
         }
 
-        .logo {
-            font-weight: 800;
-            font-size: 1.2rem;
-            letter-spacing: -0.5px;
-            text-decoration: none;
-            color: var(--twitch-text);
-        }
+        .logo { font-weight: 800; text-decoration: none; color: var(--twitch-text); font-size: 1.2rem; }
+        .logo span { color: var(--twitch-purple); }
 
-        .logo span {
-            color: var(--twitch-purple);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--twitch-text-muted);
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: color 0.2s ease;
-            padding: 0.5rem 0;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: var(--twitch-purple);
-        }
-
-        /* Active link indicator */
-        .nav-links a.active {
-            color: var(--twitch-purple);
-        }
-
-        .nav-links a.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--twitch-purple);
-        }
-
-        /* --- MAIN CONTENT --- */
         .container {
             max-width: 1000px;
             margin: 4rem auto;
             padding: 0 2rem;
-            animation: pageIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: fadeIn 0.5s ease-out;
         }
 
-        @keyframes pageIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .hero {
-            text-align: center;
-            margin-bottom: 5rem;
-        }
+        .hero { text-align: center; margin-bottom: 4rem; }
+        .hero h1 { font-size: 3rem; margin-bottom: 0.5rem; }
 
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            letter-spacing: -2px;
-        }
-
-        .hero p {
-            color: var(--twitch-text-muted);
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* --- TOOL GRID --- */
         .tool-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -142,107 +66,52 @@
         }
 
         .tool-card {
-            background-color: var(--twitch-surface-low);
+            background: var(--twitch-surface-low);
             padding: 2rem;
             border-radius: 12px;
             text-decoration: none;
             color: inherit;
             border: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            transition: 0.3s;
         }
 
         .tool-card:hover {
-            background-color: var(--twitch-surface);
             border-color: var(--twitch-purple);
-            transform: translateY(-8px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateY(-5px);
+            background: var(--twitch-surface);
         }
 
-        .tool-card h3 {
-            font-size: 1.5rem;
-            color: var(--twitch-purple);
-            margin-bottom: 0.75rem;
-        }
-
-        .tool-card p {
-            color: var(--twitch-text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-footer {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-            color: var(--twitch-purple);
-            opacity: 0.8;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 600px) {
-            .nav-links { display: none; } /* Could add a hamburger menu later */
-            .hero h1 { font-size: 2.5rem; }
-        }
+        .tool-card h3 { color: var(--twitch-purple); margin-bottom: 0.5rem; }
+        .tool-card p { color: var(--twitch-text-muted); font-size: 0.9rem; }
     </style>
 </head>
 <body>
-
     <nav>
         <div class="nav-container">
             <a href="index.html" class="logo">Stream<span>Utils</span></a>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="decision.html">Decision Maker</a></li>
-                <li><a href="timer.html">Countdown</a></li>
-                <li><a href="soundboard.html">Soundboard</a></li>
-            </ul>
         </div>
     </nav>
 
     <div class="container">
         <header class="hero">
-            <h1>Toolkit For <span>Creators</span></h1>
-            <p>A collection of simple, local, and codeable utilities for your production. No logins. No trackers. Just tools.</p>
+            <h1>Tool<span>Box</span></h1>
+            <p>Select a utility to begin.</p>
         </header>
 
         <main class="tool-grid">
             <a href="decision.html" class="tool-card">
-                <div>
-                    <h3>Decision Maker</h3>
-                    <p>Coin flips, random pickers, and weighted lists for when your chat or your brain can't decide.</p>
-                </div>
-                <div class="card-footer">Launch Tool &rarr;</div>
+                <h3>Decision Maker</h3>
+                <p>Random choices and coin flips.</p>
             </a>
-
             <a href="timer.html" class="tool-card">
-                <div>
-                    <h3>Stream Countdown</h3>
-                    <p>A high-contrast, minimalist timer for starting soon screens or break intervals. OBS browser-source ready.</p>
-                </div>
-                <div class="card-footer">Launch Tool &rarr;</div>
+                <h3>Stream Timer</h3>
+                <p>Simple countdown for your overlays.</p>
             </a>
-
             <a href="soundboard.html" class="tool-card">
-                <div>
-                    <h3>Soundboard Library</h3>
-                    <p>Organize your local sound effects into categories. Trigger them instantly with a click or hotkey.</p>
-                </div>
-                <div class="card-footer">Launch Tool &rarr;</div>
-            </a>
-
-            <a href="#" class="tool-card" style="opacity: 0.6; cursor: not-allowed;">
-                <div>
-                    <h3>Scene Banners</h3>
-                    <p>Coming Soon: Custom lower-thirds and info banners that you can update live during stream.</p>
-                </div>
-                <div class="card-footer">In Development</div>
+                <h3>Soundboard</h3>
+                <p>Click-to-play audio library.</p>
             </a>
         </main>
     </div>
-
 </body>
 </html>
