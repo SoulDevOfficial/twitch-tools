@@ -1,4 +1,4 @@
-StreamUtils Public License (Non-Commercial)
+StreamUtils Public License (Non-Commercial)<br>
 Copyright (c) 2026 [SoulDevOfficial]<br>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including the rights to use, copy, modify, merge, and publish, subject to the following conditions:<br>
