@@ -39,9 +39,6 @@
             max-width: 1000px;
             margin: 0 auto;
             width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .logo { font-weight: 800; text-decoration: none; color: var(--twitch-text); font-size: 1.2rem; }
@@ -56,8 +53,9 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .hero { text-align: center; margin-bottom: 4rem; }
-        .hero h1 { font-size: 3rem; margin-bottom: 0.5rem; }
+        .hero { text-align: center; margin-bottom: 5rem; }
+        .hero h1 { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 800; margin-bottom: 1rem; letter-spacing: -2px; }
+        .hero p { color: var(--twitch-text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
 
         .tool-grid {
             display: grid;
@@ -66,23 +64,30 @@
         }
 
         .tool-card {
-            background: var(--twitch-surface-low);
+            background-color: var(--twitch-surface-low);
             padding: 2rem;
             border-radius: 12px;
             text-decoration: none;
             color: inherit;
             border: 1px solid rgba(255,255,255,0.05);
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .tool-card:hover {
+        .tool-card:hover:not(.disabled) {
+            background-color: var(--twitch-surface);
             border-color: var(--twitch-purple);
-            transform: translateY(-5px);
-            background: var(--twitch-surface);
+            transform: translateY(-8px);
         }
 
-        .tool-card h3 { color: var(--twitch-purple); margin-bottom: 0.5rem; }
-        .tool-card p { color: var(--twitch-text-muted); font-size: 0.9rem; }
+        .tool-card h3 { font-size: 1.5rem; color: var(--twitch-purple); margin-bottom: 0.75rem; }
+        .tool-card p { color: var(--twitch-text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        
+        .card-footer { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: var(--twitch-purple); opacity: 0.8; }
+        
+        .disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -94,23 +99,42 @@
 
     <div class="container">
         <header class="hero">
-            <h1>Tool<span>Box</span></h1>
-            <p>Select a utility to begin.</p>
+            <h1>Toolkit For <span>Creators</span></h1>
+            <p>Simple, local utilities for your production. No logins, just tools.</p>
         </header>
 
         <main class="tool-grid">
             <a href="decision.html" class="tool-card">
-                <h3>Decision Maker</h3>
-                <p>Random choices and coin flips.</p>
+                <div>
+                    <h3>Decision Maker</h3>
+                    <p>Coin flips and random pickers for when you can't decide.</p>
+                </div>
+                <div class="card-footer">Launch Tool &rarr;</div>
             </a>
+
             <a href="timer.html" class="tool-card">
-                <h3>Stream Timer</h3>
-                <p>Simple countdown for your overlays.</p>
+                <div>
+                    <h3>Stream Timer</h3>
+                    <p>Minimalist countdown for breaks or intros. OBS-ready.</p>
+                </div>
+                <div class="card-footer">Launch Tool &rarr;</div>
             </a>
+
             <a href="soundboard.html" class="tool-card">
-                <h3>Soundboard</h3>
-                <p>Click-to-play audio library.</p>
+                <div>
+                    <h3>Soundboard</h3>
+                    <p>Click-to-play audio library for your local sound files.</p>
+                </div>
+                <div class="card-footer">Launch Tool &rarr;</div>
             </a>
+
+            <div class="tool-card disabled">
+                <div>
+                    <h3>Scene Banners</h3>
+                    <p>Coming Soon: Custom lower-thirds and info banners.</p>
+                </div>
+                <div class="card-footer">In Development</div>
+            </div>
         </main>
     </div>
 </body>
