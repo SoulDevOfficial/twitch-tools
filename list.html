@@ -18,6 +18,12 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: var(--twitch-dark-bg); color: var(--twitch-text); font-family: 'Inter', sans-serif; overflow: hidden; }
 
+        /* --- CUSTOM SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--twitch-purple); }
+
         /* --- HEADER --- */
         nav { background: var(--twitch-surface); height: 64px; display: flex; align-items: center; padding: 0 1.5rem; border-bottom: 2px solid var(--twitch-purple); }
         .nav-container { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center; }
@@ -31,23 +37,19 @@
         /* LEFT SIDE: OVERLAY VIEW */
         .overlay-viewport { 
             padding: 3rem; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: flex-start;
+            overflow-y: auto; /* Scrollable Overlay */
             background: radial-gradient(circle at center, #1e1e23 0%, #0e0e10 100%);
-            overflow-y: auto;
+            display: flex;
+            justify-content: flex-start;
         }
 
         #quest-container { width: 100%; max-width: 550px; }
 
-        .quest-item { cursor: pointer; transition: 0.2s; position: relative; }
-        .quest-item:hover { filter: brightness(1.2); transform: translateX(5px); }
-
-        /* STYLE: RPG QUEST */
+        /* QUEST STYLES */
+        .quest-item { cursor: pointer; transition: 0.2s; position: relative; margin-bottom: 12px; }
         .style-rpg .quest-item {
             background: rgba(0,0,0,0.7);
             border-left: 4px solid var(--twitch-purple);
-            margin-bottom: 12px;
             padding: 18px 25px;
             font-weight: 800;
             text-transform: uppercase;
@@ -55,38 +57,37 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             animation: slideIn 0.3s ease-out;
         }
-        .style-rpg .quest-item.completed { 
-            border-left-color: var(--success); 
-            opacity: 0.5; 
-            text-decoration: line-through;
-            background: rgba(0,0,0,0.3);
-        }
+        .style-rpg .quest-item.completed { border-left-color: var(--success); opacity: 0.5; text-decoration: line-through; }
 
-        /* STYLE: CHECKBOX */
-        .style-check .quest-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-        .style-check .quest-item::before { content: '☐'; color: var(--twitch-purple); font-size: 2rem; }
+        .style-check .quest-item { display: flex; align-items: center; gap: 15px; font-size: 1.8rem; font-weight: 700; }
+        .style-check .quest-item::before { content: '☐'; color: var(--twitch-purple); }
         .style-check .quest-item.completed { color: var(--success); opacity: 0.7; }
         .style-check .quest-item.completed::before { content: '☑'; }
 
         @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
 
         /* RIGHT PANEL: CONTROLLER */
-        .side-panel { background: var(--twitch-surface); padding: 2rem; border-left: 1px solid #333; display: flex; flex-direction: column; gap: 2rem; }
+        .side-panel { 
+            background: var(--twitch-surface); 
+            border-left: 1px solid #333; 
+            display: flex; 
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .panel-header { padding: 2rem 2rem 1rem 2rem; }
+        .panel-scroll-area { 
+            padding: 0 2rem 2rem 2rem; 
+            overflow-y: auto; /* Scrollable Control List */
+            flex: 1; 
+        }
+
         .section-title { font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: var(--twitch-text-muted); border-bottom: 1px solid #444; padding-bottom: 8px; margin-bottom: 15px; }
 
-        .input-group { display: flex; gap: 8px; }
+        .input-group { display: flex; gap: 8px; margin-bottom: 2rem; }
         input[type="text"] { flex: 1; background: var(--twitch-dark-bg); border: 1px solid #444; padding: 12px; border-radius: 6px; color: white; outline: none; }
-        input[type="text"]:focus { border-color: var(--twitch-purple); }
         .btn-add { background: var(--twitch-purple); border: none; color: white; padding: 0 20px; border-radius: 6px; cursor: pointer; font-weight: 900; }
 
-        .control-list { list-style: none; overflow-y: auto; }
         .control-item { 
             display: flex; 
             justify-content: space-between; 
@@ -96,28 +97,19 @@
             margin-bottom: 8px; 
             border-radius: 6px;
             font-size: 0.9rem;
-            border: 1px solid transparent;
         }
         .control-item.is-done { border-left: 3px solid var(--success); color: var(--twitch-text-muted); }
         
-        .btn-cancel { 
-            color: var(--twitch-text-muted); 
-            cursor: pointer; 
-            border: none; 
-            background: none; 
-            font-size: 1.2rem; 
-            padding: 5px;
-            transition: 0.2s;
-        }
-        .btn-cancel:hover { color: var(--danger); transform: scale(1.2); }
+        .btn-cancel { color: var(--twitch-text-muted); cursor: pointer; border: none; background: none; font-size: 1.2rem; transition: 0.2s; }
+        .btn-cancel:hover { color: var(--danger); }
 
-        select { width: 100%; background: var(--twitch-dark-bg); color: white; padding: 12px; border: 1px solid #444; border-radius: 6px; cursor: pointer; }
+        select { width: 100%; background: var(--twitch-dark-bg); color: white; padding: 12px; border: 1px solid #444; border-radius: 6px; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
     <nav>
         <div class="nav-container">
-            <span class="active-page">Quest-List //</span>
+            <span class="active-page">To-Do Lists //</span>
             <a href="https://souldevofficial.github.io/twitch-tools/" class="back-btn">Back to Home</a>
         </div>
     </nav>
@@ -128,15 +120,13 @@
         </div>
 
         <div class="side-panel">
-            <div>
+            <div class="panel-header">
                 <div class="section-title">Visual Style</div>
                 <select id="style-select" onchange="changeStyle()">
-                    <option value="style-rpg">RPG Banner (Clickable)</option>
-                    <option value="style-check">Bold Checkbox (Clickable)</option>
+                    <option value="style-rpg">RPG Banner</option>
+                    <option value="style-check">Bold Checkbox</option>
                 </select>
-            </div>
 
-            <div>
                 <div class="section-title">New Objective</div>
                 <div class="input-group">
                     <input type="text" id="quest-input" placeholder="Enter objective..." onkeypress="if(event.key==='Enter') addQuest()">
@@ -144,14 +134,10 @@
                 </div>
             </div>
 
-            <div>
+            <div class="panel-scroll-area">
                 <div class="section-title">Active List</div>
-                <div id="control-list" class="control-list"></div>
+                <div id="control-list"></div>
             </div>
-
-            <p style="font-size: 0.7rem; color: var(--twitch-text-muted); margin-top: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px;">
-                <strong>PRO TIP:</strong> You can click the quests directly on the overlay to mark them as complete!
-            </p>
         </div>
     </div>
 
@@ -161,12 +147,7 @@
         function addQuest() {
             const input = document.getElementById('quest-input');
             if (input.value.trim() === "") return;
-
-            quests.push({
-                id: Date.now(),
-                text: input.value,
-                completed: false
-            });
+            quests.push({ id: Date.now(), text: input.value, completed: false });
             input.value = "";
             render();
         }
@@ -182,26 +163,22 @@
         }
 
         function changeStyle() {
-            const selector = document.getElementById('style-select');
-            document.getElementById('quest-container').className = selector.value;
+            document.getElementById('quest-container').className = document.getElementById('style-select').value;
         }
 
         function render() {
             const container = document.getElementById('quest-container');
             const controlList = document.getElementById('control-list');
-            
             container.innerHTML = "";
             controlList.innerHTML = "";
 
             quests.forEach(q => {
-                // Overlay Item
                 const qEl = document.createElement('div');
                 qEl.className = `quest-item ${q.completed ? 'completed' : ''}`;
                 qEl.innerText = q.text;
-                qEl.onclick = () => toggleQuest(q.id); // Make overlay clickable
+                qEl.onclick = () => toggleQuest(q.id);
                 container.appendChild(qEl);
 
-                // Control Item
                 const cEl = document.createElement('div');
                 cEl.className = `control-item ${q.completed ? 'is-done' : ''}`;
                 cEl.innerHTML = `
