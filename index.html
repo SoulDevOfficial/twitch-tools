@@ -45,18 +45,11 @@
             align-items: center; 
         }
 
-        /* LOGO STYLING */
         .logo-group {
             display: flex;
             align-items: center;
             text-decoration: none;
-            gap: 12px; /* Space between image and text */
-        }
-
-        .nav-logo-img {
-            height: 32px; /* Fixed height for the nav bar */
-            width: auto;
-            display: block;
+            gap: 12px;
         }
 
         .logo { 
@@ -66,7 +59,7 @@
         }
         .logo span { color: var(--twitch-purple); }
 
-        /* --- REST OF YOUR CSS --- */
+        /* --- CONTENT --- */
         .container {
             max-width: 1000px;
             margin: 4rem auto;
@@ -78,13 +71,14 @@
 
         .hero { text-align: center; margin-bottom: 5rem; }
         .hero h1 { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 800; margin-bottom: 1rem; letter-spacing: -2px; }
+        .hero h1 span { color: var(--twitch-purple); }
         .hero p { color: var(--twitch-text-muted); font-size: 1.2rem; }
 
         .tool-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
-            min-height: 200px;
+            padding-bottom: 5rem;
         }
 
         .tool-card {
@@ -102,7 +96,7 @@
             overflow: hidden;
         }
 
-        .tool-card:not(.unavailable):hover {
+        .tool-card:hover {
             background-color: var(--twitch-surface);
             border-color: var(--twitch-purple);
             transform: translateY(-8px);
@@ -113,27 +107,16 @@
         
         .card-footer { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: var(--twitch-purple); }
 
-        .unavailable {
-            opacity: 0.4;
-            cursor: not-allowed;
-            filter: grayscale(0.8);
-            pointer-events: none;
-        }
-
         .status-badge {
             position: absolute;
             top: 1rem;
             right: 1rem;
             font-size: 0.65rem;
-            background: #333;
+            background: var(--twitch-purple);
             padding: 2px 8px;
             border-radius: 4px;
             color: white;
             text-transform: uppercase;
-        }
-
-        .tool-card:not(.unavailable) .status-badge {
-            background: var(--twitch-purple);
         }
     </style>
 </head>
@@ -149,44 +132,53 @@
     <div class="container">
         <header class="hero">
             <h1>Toolkit For <span>Creators</span></h1>
-            <p>Simple, local utilities. Toggle availability in the code.</p>
+            <p>Minimalist utilities for your stream. OBS-ready.</p>
         </header>
 
         <main class="tool-grid">
             <a href="pages/coin-flip/" class="tool-card">
-                <span class="status-badge">Experimental</span>
+                <span class="status-badge">Live</span>
                 <div>
                     <h3>Decision Maker</h3>
                     <p>Coin flips and random pickers for when you can't decide.</p>
                 </div>
-                <div class="card-footer">Click me lolz</div>
+                <div class="card-footer">Flip a coin</div>
             </a>
 
-            <a href="#" class="tool-card unavailable">
-                <span class="status-badge">Concept</span>
+            <a href="#" class="tool-card">
+                <span class="status-badge">Live</span>
                 <div>
                     <h3>Stream Timer</h3>
-                    <p>Minimalist countdown for breaks or intros. OBS-ready.</p>
+                    <p>Minimalist countdown for breaks or intros. Fully customizable.</p>
                 </div>
-                <div class="card-footer">Coming Soon</div>
+                <div class="card-footer">Start the clock</div>
             </a>
 
-            <a href="#" class="tool-card unavailable">
-                <span class="status-badge">Concept</span>
+            <a href="#" class="tool-card">
+                <span class="status-badge">Live</span>
                 <div>
-                    <h3>Soundboard</h3>
-                    <p>Click-to-play audio library for your local sound files.</p>
+                    <h3>Sound Library</h3>
+                    <p>Searchable audio library. Easily trigger local SFX for stream moments.</p>
                 </div>
-                <div class="card-footer">Coming Soon</div>
+                <div class="card-footer">Play some sounds</div>
             </a>
 
-            <a href="#" class="tool-card unavailable">
-                <span class="status-badge">Concept</span>
+            <a href="#" class="tool-card">
+                <span class="status-badge">Live</span>
                 <div>
-                    <h3>Scene Banners</h3>
-                    <p>Custom lower-thirds and info banners that you can update live.</p>
+                    <h3>Stats Counter</h3>
+                    <p>Track deaths, lives, and wins in real-time with big bold numbers.</p>
                 </div>
-                <div class="card-footer">Coming Soon</div>
+                <div class="card-footer">Update stats</div>
+            </a>
+
+            <a href="#" class="tool-card">
+                <span class="status-badge">Live</span>
+                <div>
+                    <h3>Dice Roller</h3>
+                    <p>3D animated dice with support for D6, D20, and custom counts.</p>
+                </div>
+                <div class="card-footer">Roll for initiative</div>
             </a>
         </main>
     </div>
