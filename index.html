@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StreamUtils // Home</title>
+    
+    <link rel="icon" type="image/png" href="site-logo.png">
+
     <style>
         :root {
             --twitch-purple: #9146FF;
@@ -23,6 +26,7 @@
             line-height: 1.6;
         }
 
+        /* --- NAVIGATION --- */
         nav {
             background-color: var(--twitch-surface);
             height: 64px;
@@ -35,10 +39,36 @@
             z-index: 1000;
         }
 
-        .nav-container { max-width: 1000px; margin: 0 auto; width: 100%; }
-        .logo { font-weight: 800; text-decoration: none; color: var(--twitch-text); font-size: 1.2rem; }
+        .nav-container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            width: 100%; 
+            display: flex; 
+            align-items: center; 
+        }
+
+        /* LOGO STYLING */
+        .logo-group {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 12px; /* Space between image and text */
+        }
+
+        .nav-logo-img {
+            height: 32px; /* Fixed height for the nav bar */
+            width: auto;
+            display: block;
+        }
+
+        .logo { 
+            font-weight: 800; 
+            color: var(--twitch-text); 
+            font-size: 1.2rem; 
+        }
         .logo span { color: var(--twitch-purple); }
 
+        /* --- REST OF YOUR CSS --- */
         .container {
             max-width: 1000px;
             margin: 4rem auto;
@@ -52,12 +82,11 @@
         .hero h1 { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 800; margin-bottom: 1rem; letter-spacing: -2px; }
         .hero p { color: var(--twitch-text-muted); font-size: 1.2rem; }
 
-        /* --- STABLE GRID SYSTEM --- */
         .tool-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
-            min-height: 200px; /* Prevents collapse if empty */
+            min-height: 200px;
         }
 
         .tool-card {
@@ -75,7 +104,6 @@
             overflow: hidden;
         }
 
-        /* Hover Effect for Active Tools */
         .tool-card:not(.unavailable):hover {
             background-color: var(--twitch-surface);
             border-color: var(--twitch-purple);
@@ -87,12 +115,11 @@
         
         .card-footer { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: var(--twitch-purple); }
 
-        /* --- UNAVAILABLE STATE --- */
         .unavailable {
             opacity: 0.4;
             cursor: not-allowed;
             filter: grayscale(0.8);
-            pointer-events: none; /* Prevents clicking links */
+            pointer-events: none;
         }
 
         .status-badge {
@@ -110,13 +137,15 @@
         .tool-card:not(.unavailable) .status-badge {
             background: var(--twitch-purple);
         }
-
     </style>
 </head>
 <body>
     <nav>
         <div class="nav-container">
-            <a href="index.html" class="logo">Stream<span>Utils</span></a>
+            <a href="index.html" class="logo-group">
+                <img src="site-logo.png" alt="Logo" class="nav-logo-img">
+                <div class="logo">Stream<span>Utils</span></div>
+            </a>
         </div>
     </nav>
 
@@ -127,7 +156,6 @@
         </header>
 
         <main class="tool-grid">
-            
             <a href="#" class="tool-card unavailable">
                 <span class="status-badge">Concept</span>
                 <div>
@@ -163,7 +191,6 @@
                 </div>
                 <div class="card-footer">Coming Soon</div>
             </a>
-
         </main>
     </div>
 </body>
