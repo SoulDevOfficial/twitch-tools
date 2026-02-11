@@ -35,12 +35,7 @@
             z-index: 1000;
         }
 
-        .nav-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
+        .nav-container { max-width: 1000px; margin: 0 auto; width: 100%; }
         .logo { font-weight: 800; text-decoration: none; color: var(--twitch-text); font-size: 1.2rem; }
         .logo span { color: var(--twitch-purple); }
 
@@ -55,12 +50,14 @@
 
         .hero { text-align: center; margin-bottom: 5rem; }
         .hero h1 { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 800; margin-bottom: 1rem; letter-spacing: -2px; }
-        .hero p { color: var(--twitch-text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
+        .hero p { color: var(--twitch-text-muted); font-size: 1.2rem; }
 
+        /* --- STABLE GRID SYSTEM --- */
         .tool-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
+            min-height: 200px; /* Prevents collapse if empty */
         }
 
         .tool-card {
@@ -74,9 +71,12 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            position: relative;
+            overflow: hidden;
         }
 
-        .tool-card:hover:not(.disabled) {
+        /* Hover Effect for Active Tools */
+        .tool-card:not(.unavailable):hover {
             background-color: var(--twitch-surface);
             border-color: var(--twitch-purple);
             transform: translateY(-8px);
@@ -85,9 +85,32 @@
         .tool-card h3 { font-size: 1.5rem; color: var(--twitch-purple); margin-bottom: 0.75rem; }
         .tool-card p { color: var(--twitch-text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
         
-        .card-footer { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: var(--twitch-purple); opacity: 0.8; }
-        
-        .disabled { opacity: 0.5; cursor: not-allowed; }
+        .card-footer { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: var(--twitch-purple); }
+
+        /* --- UNAVAILABLE STATE --- */
+        .unavailable {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(0.8);
+            pointer-events: none; /* Prevents clicking links */
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.65rem;
+            background: #333;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .tool-card:not(.unavailable) .status-badge {
+            background: var(--twitch-purple);
+        }
+
     </style>
 </head>
 <body>
@@ -100,45 +123,47 @@
     <div class="container">
         <header class="hero">
             <h1>Toolkit For <span>Creators</span></h1>
-            <p>Simple, local utilities for your production. No logins, just tools.</p>
+            <p>Simple, local utilities. Toggle availability in the code.</p>
         </header>
 
         <main class="tool-grid">
-            <div class="tool-card disabled">
+            
             <a href="decision.html" class="tool-card">
+                <span class="status-badge">Ready</span>
                 <div>
                     <h3>Decision Maker</h3>
                     <p>Coin flips and random pickers for when you can't decide.</p>
                 </div>
-                <div class="card-footer">In Development</div>
-           <!-- <div class="card-footer">Launch Tool &rarr;</div> -->
+                <div class="card-footer">Launch Tool &rarr;</div>
             </a>
 
-            <div class="tool-card disabled">
             <a href="timer.html" class="tool-card">
+                <span class="status-badge">Ready</span>
                 <div>
                     <h3>Stream Timer</h3>
                     <p>Minimalist countdown for breaks or intros. OBS-ready.</p>
                 </div>
-                <div class="card-footer">In Development</div>
+                <div class="card-footer">Launch Tool &rarr;</div>
             </a>
 
-            <div class="tool-card disabled">
-            <a href="soundboard.html" class="tool-card">
+            <a href="soundboard.html" class="tool-card unavailable">
+                <span class="status-badge">In Dev</span>
                 <div>
                     <h3>Soundboard</h3>
                     <p>Click-to-play audio library for your local sound files.</p>
                 </div>
+                <div class="card-footer">Coming Soon</div>
+            </a>
+
+            <a href="#" class="tool-card unavailable">
+                <span class="status-badge">Concept</span>
+                <div>
+                    <h3>Scene Banners</h3>
+                    <p>Custom lower-thirds and info banners that you can update live.</p>
+                </div>
                 <div class="card-footer">In Development</div>
             </a>
 
-            <div class="tool-card disabled">
-                <div>
-                    <h3>Scene Banners</h3>
-                    <p>Coming Soon: Custom lower-thirds and info banners.</p>
-                </div>
-                <div class="card-footer">In Development</div>
-            </div>
         </main>
     </div>
 </body>
