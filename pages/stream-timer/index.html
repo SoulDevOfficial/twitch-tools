@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamUtils // Timer & Stopwatch</title>
+    <link rel="icon" type="image/png" href="site-logo.png">
+    <style>
+        :root {
+            --twitch-purple: #9146FF;
+            --twitch-dark-bg: #0e0e10;
+            --twitch-surface: #1f1f23;
+            --twitch-text: #efeff1;
+            --twitch-text-muted: #adadb8;
+            --danger: #eb0400;
+            --success: #00f593;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { 
+            background: var(--twitch-dark-bg); 
+            color: var(--twitch-text); 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            margin: 0; 
+            overflow: hidden;
+        }
+
+        /* --- HEADER --- */
+        nav {
+            background: var(--twitch-surface);
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            border-bottom: 2px solid var(--twitch-purple);
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .active-page {
+            font-weight: 800;
+            color: var(--twitch-purple);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--twitch-text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.05);
+            transition: 0.2s;
+        }
+
+        .back-btn:hover { background: var(--twitch-purple); color: white; }
+
+        /* --- TIMER UI --- */
+        .container { 
+            height: calc(100vh - 64px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mode-indicator {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--twitch-purple);
+            margin-bottom: -1rem;
+            font-weight: 700;
+        }
+
+        #timer-display {
+            font-size: 10rem;
+            font-weight: 900;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -4px;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- CONTROLS BOX --- */
+        .controls-card {
+            background: var(--twitch-surface);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--twitch-text-muted);
+        }
+
+        input {
+            background: var(--twitch-dark-bg);
+            border: 1px solid #333;
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            width: 70px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            padding: 14px 20px;
+            border-radius: 6px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-main { background: var(--twitch-purple); color: white; grid-column: span 2; font-size: 1.1rem; }
+        .btn-sub { background: #333; color: var(--twitch-text); }
+        .btn-mode { background: #2a2a2e; color: var(--twitch-text-muted); border: 1px solid #444; }
+        .btn-mode.active { border-color: var(--twitch-purple); color: var(--twitch-purple); background: rgba(145, 70, 255, 0.1); }
+
+        .btn:hover { filter: brightness(1.2); transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+
+        .timer-danger { color: var(--danger); }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <span class="active-page">Clock Tool //</span>
+            <a href="https://souldevofficial.github.io/twitch-tools/" class="back-btn">Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="mode-text" class="mode-indicator">Countdown Mode</div>
+        <div id="timer-display">05:00</div>
+
+        <div class="controls-card">
+            <div class="button-grid">
+                <button id="mode-down" class="btn btn-mode active" onclick="setMode('down')">Countdown</button>
+                <button id="mode-up" class="btn btn-mode" onclick="setMode('up')">Count Up</button>
+            </div>
+
+            <div class="input-row" id="input-area">
+                <div class="input-group">
+                    <label>Min</label>
+                    <input type="number" id="min-input" value="5" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Sec</label>
+                    <input type="number" id="sec-input" value="0" min="0" max="59">
+                </div>
+            </div>
+
+            <div class="button-grid">
+                <button id="start-btn" class="btn btn-main" onclick="toggleTimer()">Start</button>
+                <button class="btn btn-sub" onclick="resetTimer()">Reset</button>
+                <button class="btn btn-sub" onclick="clearTimer()">Clear</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let time = 0;
+        let timerInterval = null;
+        let isRunning = false;
+        let mode = 'down'; // 'up' or 'down'
+
+        const display = document.getElementById('timer-display');
+        const startBtn = document.getElementById('start-btn');
+        const modeText = document.getElementById('mode-text');
+        const inputArea = document.getElementById('input-area');
+
+        function setMode(newMode) {
+            mode = newMode;
+            resetTimer();
+            
+            // UI Toggle
+            document.getElementById('mode-up').classList.toggle('active', mode === 'up');
+            document.getElementById('mode-down').classList.toggle('active', mode === 'down');
+            modeText.innerText = mode === 'up' ? "Stopwatch Mode" : "Countdown Mode";
+            inputArea.style.visibility = mode === 'up' ? "hidden" : "visible";
+        }
+
+        function updateDisplay() {
+            const m = Math.floor(Math.abs(time) / 60);
+            const s = Math.abs(time) % 60;
+            display.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            
+            if (mode === 'down' && time <= 10 && time > 0) {
+                display.classList.add('timer-danger');
+            } else {
+                display.classList.remove('timer-danger');
+            }
+        }
+
+        function toggleTimer() {
+            if (isRunning) {
+                clearInterval(timerInterval);
+                startBtn.innerText = "Resume";
+                isRunning = false;
+            } else {
+                if (!isRunning && time === 0 && mode === 'down') {
+                    time = (parseInt(document.getElementById('min-input').value) * 60) + 
+                           parseInt(document.getElementById('sec-input').value);
+                }
+                
+                isRunning = true;
+                startBtn.innerText = "Pause";
+                
+                timerInterval = setInterval(() => {
+                    if (mode === 'down') {
+                        time--;
+                        if (time <= 0) {
+                            time = 0;
+                            clearInterval(timerInterval);
+                            isRunning = false;
+                            startBtn.innerText = "Start";
+                        }
+                    } else {
+                        time++;
+                    }
+                    updateDisplay();
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            startBtn.innerText = "Start";
+            if (mode === 'down') {
+                time = (parseInt(document.getElementById('min-input').value) * 60) + 
+                       parseInt(document.getElementById('sec-input').value);
+            } else {
+                time = 0;
+            }
+            updateDisplay();
+        }
+
+        function clearTimer() {
+            document.getElementById('min-input').value = 0;
+            document.getElementById('sec-input').value = 0;
+            resetTimer();
+        }
+
+        // Init
+        updateDisplay();
+    </script>
+</body>
+</html>
