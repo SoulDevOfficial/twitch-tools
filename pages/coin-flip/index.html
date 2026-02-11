@@ -24,7 +24,7 @@
             overflow: hidden;
         }
 
-        /* --- HEADER --- */
+        /* --- HEADER (Updated to match Timer) --- */
         nav {
             background: var(--twitch-surface);
             height: 64px;
@@ -64,7 +64,7 @@
 
         .back-btn:hover { background: var(--twitch-purple); color: white; }
 
-        /* --- COIN UI --- */
+        /* --- OLD CENTERED UI --- */
         .container { 
             height: calc(100vh - 64px);
             display: flex;
@@ -174,26 +174,15 @@
             const coin = document.getElementById('coin');
             const btn = document.getElementById('flip-btn');
             
-            // Disable button during flip
             btn.disabled = true;
 
-            // Determine result (0 = heads, 1 = tails)
             const result = Math.floor(Math.random() * 2);
-            
-            // Add a massive amount of spins (5 to 10 full rotations)
             const extraSpins = (Math.floor(Math.random() * 5) + 5) * 360;
-            
-            // Calculate final target rotation
-            // Heads = 0, 360, 720... | Tails = 180, 540, 900...
             const finalRotation = currentRotation + extraSpins + (result === 1 ? 180 : 0);
             
-            // Apply CSS transform
             coin.style.transform = `rotateY(${finalRotation}deg)`;
-            
-            // Save rotation for next flip (prevents snapping backward)
             currentRotation = finalRotation;
 
-            // Re-enable button after animation (3 seconds)
             setTimeout(() => {
                 btn.disabled = false;
             }, 3000);
