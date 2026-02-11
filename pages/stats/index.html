@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamUtils // Stats Counter</title>
+    <link rel="icon" type="image/png" href="site-logo.png">
+    <style>
+        :root {
+            --twitch-purple: #9146FF;
+            --twitch-dark-bg: #0e0e10;
+            --twitch-surface: #1f1f23;
+            --twitch-text: #efeff1;
+            --twitch-text-muted: #adadb8;
+            --danger: #eb0400;
+            --success: #00f593;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { 
+            background: var(--twitch-dark-bg); 
+            color: var(--twitch-text); 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            margin: 0; 
+            overflow: hidden;
+        }
+
+        /* --- HEADER --- */
+        nav {
+            background: var(--twitch-surface);
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            border-bottom: 2px solid var(--twitch-purple);
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .active-page {
+            font-weight: 800;
+            color: var(--twitch-purple);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--twitch-text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.05);
+            transition: 0.2s;
+        }
+
+        .back-btn:hover { background: var(--twitch-purple); color: white; }
+
+        /* --- STATS UI --- */
+        .container { 
+            height: calc(100vh - 64px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .stats-grid {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-card {
+            background: var(--twitch-surface);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+            min-width: 220px;
+            transition: 0.3s;
+        }
+
+        .stat-card:hover { border-color: var(--twitch-purple); }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--twitch-text-muted);
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Specific Colors */
+        .death-val { color: var(--danger); }
+        .life-val { color: var(--success); }
+        .custom-val { color: var(--twitch-purple); }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn {
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 6px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-minus { background: #333; color: white; }
+        .btn-plus { background: var(--twitch-purple); color: white; }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.2); }
+
+        .reset-all {
+            margin-top: 2rem;
+            background: transparent;
+            border: 1px solid #333;
+            color: var(--twitch-text-muted);
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+        }
+
+        .reset-all:hover { color: var(--danger); border-color: var(--danger); }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <span class="active-page">Stats Counter //</span>
+            <a href="https://souldevofficial.github.io/twitch-tools/" class="back-btn">Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Deaths</div>
+                <div id="death-count" class="stat-value death-val">0</div>
+                <div class="controls">
+                    <button class="btn btn-minus" onclick="change('death', -1)">-</button>
+                    <button class="btn btn-plus" onclick="change('death', 1)">+</button>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Lives</div>
+                <div id="life-count" class="stat-value life-val">3</div>
+                <div class="controls">
+                    <button class="btn btn-minus" onclick="change('life', -1)">-</button>
+                    <button class="btn btn-plus" onclick="change('life', 1)">+</button>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Wins</div>
+                <div id="custom-count" class="stat-value custom-val">0</div>
+                <div class="controls">
+                    <button class="btn btn-minus" onclick="change('custom', -1)">-</button>
+                    <button class="btn btn-plus" onclick="change('custom', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="reset-all" onclick="resetAll()">Reset All Stats</button>
+    </div>
+
+    <script>
+        // Store values in an object
+        let stats = {
+            death: 0,
+            life: 3,
+            custom: 0
+        };
+
+        function updateDisplay() {
+            document.getElementById('death-count').innerText = stats.death;
+            document.getElementById('life-count').innerText = stats.life;
+            document.getElementById('custom-count').innerText = stats.custom;
+        }
+
+        function change(type, amount) {
+            stats[type] += amount;
+            
+            // Prevent lives from going below 0
+            if (type === 'life' && stats.life < 0) stats.life = 0;
+            // Prevent deaths from going below 0
+            if (type === 'death' && stats.death < 0) stats.death = 0;
+
+            updateDisplay();
+        }
+
+        function resetAll() {
+            if(confirm("Are you sure you want to reset all stats?")) {
+                stats.death = 0;
+                stats.life = 3;
+                stats.custom = 0;
+                updateDisplay();
+            }
+        }
+    </script>
+</body>
+</html>
