@@ -18,50 +18,76 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: var(--twitch-dark-bg); color: var(--twitch-text); font-family: 'Inter', sans-serif; overflow: hidden; }
 
-        /* --- CUSTOM SCROLLBAR --- */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        /* --- CUSTOM SCROLLBARS --- */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        ::-webkit-scrollbar-thumb { 
+            background: #444; 
+            border-radius: 10px; 
+            border: 2px solid var(--twitch-surface);
+        }
         ::-webkit-scrollbar-thumb:hover { background: var(--twitch-purple); }
 
-        /* --- HEADER --- */
-        nav { background: var(--twitch-surface); height: 64px; display: flex; align-items: center; padding: 0 1.5rem; border-bottom: 2px solid var(--twitch-purple); }
+        /* --- NAVIGATION --- */
+        nav { 
+            background: var(--twitch-surface); 
+            height: 64px; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 1.5rem; 
+            border-bottom: 2px solid var(--twitch-purple); 
+            flex-shrink: 0;
+        }
         .nav-container { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center; }
         .active-page { font-weight: 800; color: var(--twitch-purple); text-transform: uppercase; font-size: 0.9rem; }
         .back-btn { text-decoration: none; color: var(--twitch-text-muted); font-size: 0.85rem; font-weight: 600; padding: 8px 16px; border-radius: 4px; background: rgba(255,255,255,0.05); transition: 0.2s; }
         .back-btn:hover { background: var(--twitch-purple); color: white; }
 
-        /* --- LAYOUT --- */
-        .dashboard { display: grid; grid-template-columns: 1fr 380px; height: calc(100vh - 64px); }
+        /* --- MAIN DASHBOARD --- */
+        .dashboard { 
+            display: grid; 
+            grid-template-columns: 1fr 380px; 
+            height: calc(100vh - 64px); 
+        }
 
-        /* LEFT SIDE: OVERLAY VIEW */
+        /* LEFT SIDE: OVERLAY VIEWPORT */
         .overlay-viewport { 
             padding: 3rem; 
-            overflow-y: auto; /* Scrollable Overlay */
             background: radial-gradient(circle at center, #1e1e23 0%, #0e0e10 100%);
-            display: flex;
-            justify-content: flex-start;
+            overflow-y: scroll; /* Force scroll visibility */
+            display: block; /* Block ensures height builds downward for scrolling */
         }
 
-        #quest-container { width: 100%; max-width: 550px; }
+        #quest-container { width: 100%; max-width: 600px; margin: 0 auto 0 0; }
 
-        /* QUEST STYLES */
-        .quest-item { cursor: pointer; transition: 0.2s; position: relative; margin-bottom: 12px; }
+        /* QUEST ITEM STYLES */
+        .quest-item { cursor: pointer; transition: 0.2s; margin-bottom: 12px; position: relative; }
+        .quest-item:hover { transform: translateX(5px); filter: brightness(1.2); }
+
+        /* RPG STYLE */
         .style-rpg .quest-item {
-            background: rgba(0,0,0,0.7);
-            border-left: 4px solid var(--twitch-purple);
-            padding: 18px 25px;
+            background: rgba(0,0,0,0.8);
+            border-left: 5px solid var(--twitch-purple);
+            padding: 20px 25px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
             animation: slideIn 0.3s ease-out;
         }
-        .style-rpg .quest-item.completed { border-left-color: var(--success); opacity: 0.5; text-decoration: line-through; }
+        .style-rpg .quest-item.completed { border-left-color: var(--success); opacity: 0.4; text-decoration: line-through; }
 
-        .style-check .quest-item { display: flex; align-items: center; gap: 15px; font-size: 1.8rem; font-weight: 700; }
-        .style-check .quest-item::before { content: '☐'; color: var(--twitch-purple); }
-        .style-check .quest-item.completed { color: var(--success); opacity: 0.7; }
+        /* CHECKBOX STYLE */
+        .style-check .quest-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 2rem;
+            font-weight: 700;
+            padding: 10px 0;
+        }
+        .style-check .quest-item::before { content: '☐'; color: var(--twitch-purple); font-size: 2.2rem; flex-shrink: 0; }
+        .style-check .quest-item.completed { color: var(--success); opacity: 0.6; }
         .style-check .quest-item.completed::before { content: '☑'; }
 
         @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
@@ -71,23 +97,24 @@
             background: var(--twitch-surface); 
             border-left: 1px solid #333; 
             display: flex; 
-            flex-direction: column;
+            flex-direction: column; 
             height: 100%;
+            overflow: hidden;
         }
 
-        .panel-header { padding: 2rem 2rem 1rem 2rem; }
-        .panel-scroll-area { 
-            padding: 0 2rem 2rem 2rem; 
-            overflow-y: auto; /* Scrollable Control List */
-            flex: 1; 
-        }
+        .panel-header { padding: 2rem; flex-shrink: 0; }
+        .panel-scroll-area { padding: 0 2rem 2rem 2rem; overflow-y: scroll; flex: 1; }
 
         .section-title { font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: var(--twitch-text-muted); border-bottom: 1px solid #444; padding-bottom: 8px; margin-bottom: 15px; }
 
-        .input-group { display: flex; gap: 8px; margin-bottom: 2rem; }
-        input[type="text"] { flex: 1; background: var(--twitch-dark-bg); border: 1px solid #444; padding: 12px; border-radius: 6px; color: white; outline: none; }
+        .input-group { display: flex; gap: 8px; margin-bottom: 1rem; }
+        input[type="text"] { flex: 1; background: var(--twitch-dark-bg); border: 1px solid #444; padding: 12px; border-radius: 6px; color: white; outline: none; transition: 0.2s; }
+        input[type="text"]:focus { border-color: var(--twitch-purple); }
         .btn-add { background: var(--twitch-purple); border: none; color: white; padding: 0 20px; border-radius: 6px; cursor: pointer; font-weight: 900; }
 
+        select { width: 100%; background: var(--twitch-dark-bg); color: white; padding: 12px; border: 1px solid #444; border-radius: 6px; cursor: pointer; margin-bottom: 1rem; }
+
+        /* CONTROL LIST ITEMS */
         .control-item { 
             display: flex; 
             justify-content: space-between; 
@@ -97,46 +124,56 @@
             margin-bottom: 8px; 
             border-radius: 6px;
             font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: 0.2s;
         }
-        .control-item.is-done { border-left: 3px solid var(--success); color: var(--twitch-text-muted); }
+        .control-item.is-done { border-left-color: var(--success); opacity: 0.6; }
         
-        .btn-cancel { color: var(--twitch-text-muted); cursor: pointer; border: none; background: none; font-size: 1.2rem; transition: 0.2s; }
-        .btn-cancel:hover { color: var(--danger); }
-
-        select { width: 100%; background: var(--twitch-dark-bg); color: white; padding: 12px; border: 1px solid #444; border-radius: 6px; margin-bottom: 1rem; }
+        .btn-cancel { 
+            color: var(--twitch-text-muted); 
+            cursor: pointer; 
+            border: none; 
+            background: none; 
+            font-size: 1.2rem; 
+            padding-left: 10px;
+            transition: 0.2s;
+        }
+        .btn-cancel:hover { color: var(--danger); transform: scale(1.1); }
     </style>
 </head>
 <body>
     <nav>
         <div class="nav-container">
-            <span class="active-page">To-Do Lists //</span>
+            <span class="active-page">To-Do List //</span>
             <a href="https://souldevofficial.github.io/twitch-tools/" class="back-btn">Back to Home</a>
         </div>
     </nav>
 
     <div class="dashboard">
         <div class="overlay-viewport">
-            <div id="quest-container" class="style-rpg"></div>
+            <div id="quest-container" class="style-rpg">
+                </div>
         </div>
 
         <div class="side-panel">
             <div class="panel-header">
                 <div class="section-title">Visual Style</div>
                 <select id="style-select" onchange="changeStyle()">
-                    <option value="style-rpg">RPG Banner</option>
-                    <option value="style-check">Bold Checkbox</option>
+                    <option value="style-rpg">RPG Banner Style</option>
+                    <option value="style-check">Bold Checkbox Style</option>
                 </select>
 
-                <div class="section-title">New Objective</div>
+                <div class="section-title">Add Objective</div>
                 <div class="input-group">
-                    <input type="text" id="quest-input" placeholder="Enter objective..." onkeypress="if(event.key==='Enter') addQuest()">
+                    <input type="text" id="quest-input" placeholder="Type quest here..." onkeypress="if(event.key==='Enter') addQuest()">
                     <button class="btn-add" onclick="addQuest()">+</button>
                 </div>
             </div>
 
             <div class="panel-scroll-area">
-                <div class="section-title">Active List</div>
-                <div id="control-list"></div>
+                <div class="section-title">Manage List</div>
+                <div id="control-list">
+                    </div>
             </div>
         </div>
     </div>
@@ -147,9 +184,20 @@
         function addQuest() {
             const input = document.getElementById('quest-input');
             if (input.value.trim() === "") return;
-            quests.push({ id: Date.now(), text: input.value, completed: false });
+
+            const newQuest = {
+                id: Date.now(),
+                text: input.value,
+                completed: false
+            };
+
+            quests.push(newQuest);
             input.value = "";
             render();
+            
+            // Auto-scroll the overlay to the bottom when adding new items
+            const overlay = document.querySelector('.overlay-viewport');
+            overlay.scrollTop = overlay.scrollHeight;
         }
 
         function toggleQuest(id) {
@@ -163,22 +211,26 @@
         }
 
         function changeStyle() {
-            document.getElementById('quest-container').className = document.getElementById('style-select').value;
+            const style = document.getElementById('style-select').value;
+            document.getElementById('quest-container').className = style;
         }
 
         function render() {
             const container = document.getElementById('quest-container');
             const controlList = document.getElementById('control-list');
+            
             container.innerHTML = "";
             controlList.innerHTML = "";
 
             quests.forEach(q => {
+                // Create Overlay Element
                 const qEl = document.createElement('div');
                 qEl.className = `quest-item ${q.completed ? 'completed' : ''}`;
                 qEl.innerText = q.text;
                 qEl.onclick = () => toggleQuest(q.id);
                 container.appendChild(qEl);
 
+                // Create Control Element
                 const cEl = document.createElement('div');
                 cEl.className = `control-item ${q.completed ? 'is-done' : ''}`;
                 cEl.innerHTML = `
